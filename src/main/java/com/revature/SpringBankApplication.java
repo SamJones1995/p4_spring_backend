@@ -13,7 +13,6 @@ public class SpringBankApplication {
 
 	public static void main(String[] args) {
 		
-		System.out.println(System.getenv("P4_HOST"));
 		SpringApplication.run(SpringBankApplication.class, args);
 	}
 	

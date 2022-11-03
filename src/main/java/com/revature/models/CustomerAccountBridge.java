@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.util.Optional;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,5 +28,36 @@ public class CustomerAccountBridge {
 	@OneToOne
 	@JoinColumn(name = "accountId")
 	private Account accountId;
+
+	public long getCustomerAccountBridgeId() {
+		return customerAccountBridgeId;
+	}
+
+	public void setCustomerAccountBridgeId(long customerAccountBridgeId) {
+		this.customerAccountBridgeId = customerAccountBridgeId;
+	}
+
+	public Customer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Customer customerId) {
+		this.customerId = customerId;
+	}
+
+	public Account getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Account accountId) {
+		this.accountId = accountId;
+	}
+
+	public void setCustomerId(Optional<Customer> byCustomerId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
 }

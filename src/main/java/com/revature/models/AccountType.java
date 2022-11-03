@@ -19,4 +19,22 @@ public class AccountType {
 	
 	private String accountTypeName;
 
+	public long getAccountTypeId() {
+		return accountTypeId;
+	}
+
+	public void setAccountTypeId(long accountTypeId) {
+		this.accountTypeId = accountTypeId;
+	}
+
+	public String getAccountTypeName() {
+		return accountTypeName;
+	}
+
+	public void setAccountTypeName(String accountTypeName) {
+		this.accountTypeName = accountTypeName;
+	}
+	
+	
+
 }

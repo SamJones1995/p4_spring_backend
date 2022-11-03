@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.nio.charset.Charset;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.revature.dtos.LoginRequest;
 import com.revature.models.Customer;
 
 @RunWith(SpringRunner.class)
@@ -34,6 +36,24 @@ public class CustomerControllerTest {
 	@Autowired
 	public MockMvc mvc;
 	
+	@Test
+	public void login() throws Exception {	
+		RequestBuilder request = MockMvcRequestBuilders.get("/customer/login");
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setUsername("testy");
+		loginRequest.setPassword("password1");
+		
+		ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson=ow.writeValueAsString(loginRequest);
+	    
+	    MvcResult result = mvc.perform(post("/customer/login").contentType(APPLICATION_JSON_UTF8)
+	    		.content(requestJson)
+	    		).andReturn();
+	    
+	    assertEquals("Login failed", result.getResponse().getContentAsString());
+	}
 	@Test
 	public void register() throws Exception {
 		RequestBuilder request = MockMvcRequestBuilders.get("/customer/register");
@@ -60,6 +80,69 @@ public class CustomerControllerTest {
 	    		).andReturn();
 	    
 	    assertEquals("Username already in use!", result.getResponse().getContentAsString());
+	}
+	
+	@Test
+	public void getCustomerByIdFail() throws Exception {
+		Customer cust = new Customer();
+		cust.setCustomerId(99);
+		
+		ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson=ow.writeValueAsString(cust);
+	    
+	    MvcResult result = mvc.perform(get("/customer/2").contentType(APPLICATION_JSON_UTF8)
+	    		.content(requestJson)
+	    		).andReturn();
+	    
+	    assertEquals("User not found", result.getResponse().getContentAsString());
+		
+	}
+	
+	@Test
+	public void getCustomerByUsernameFail() throws Exception {
+		Customer cust = new Customer();
+		cust.setUsername("Userman");
+		
+		ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson=ow.writeValueAsString(cust);
+	    
+	    MvcResult result = mvc.perform(get("/customer/username/notauser").contentType(APPLICATION_JSON_UTF8)
+	    		.content(requestJson)
+	    		).andReturn();
+	    
+	    assertEquals("User not found", result.getResponse().getContentAsString());
+		
+	}
+	
+	@Test
+	public void getCustomerByUsernameSuccess() throws Exception {
+		Customer cust = new Customer();
+		   cust.setCustomerId(1);
+		   cust.setUsername("testyboy");
+		   cust.setPassword("password");
+		   cust.setFirstName("testguy");
+		   cust.setLastName("Test");
+		   cust.setAddress("111 test rd");
+		   cust.setAddress2("appt T");
+		   cust.setCity("Testtown");
+		    cust.setState("TX");
+		    cust.setZip(23312);
+		
+		ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer();
+	    String requestJson=ow.writeValueAsString(cust);
+	    
+	    MvcResult result = mvc.perform(get("/customer/username/testyboy").contentType(APPLICATION_JSON_UTF8)
+	    		.content(requestJson)
+	    		).andReturn();
+	    
+	    assertEquals(requestJson, result.getResponse().getContentAsString());
+		
 	}
 
 }

@@ -114,6 +114,13 @@ public class Customer {
 	public void setZip(int zip) {
 		this.zip = zip;
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", username=" + username + ", password=" + password
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", address2="
+				+ address2 + ", city=" + city + ", state=" + state + ", zip=" + zip + "]";
+	}
 	
 	
 	
